@@ -1,64 +1,39 @@
 "use strict"
 
-const coreInit = ({ jscad }) => {
+const coreInit = ({ jscad, swcadJs }) => {
 
     /**
      * First step to building the library
      * */
-    const swcadJsCore = {
-        data: require('swcad-js-data').init({ jscad }),
-        calcs: null,
+    const swcadJsSpecCore = {
+        data: require('swcad-js-spec-data').init({ jscad }),
         profiles: null,
-        profileSpec: null,
         components: null,
-        componentSpec: null,
-        utils: null,
-        models: null,
     }
 
 
     /**
      * Intermediate step to building the library
      * */
-    let swcadJsAssembly = swcadJsCore
+    let swcadJsSpecAssembly = swcadJsSpecCore
 
-    const assemblyCalcs = require('swcad-js-calcs').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.calcs = assemblyCalcs
+    const assemblyProfiles = require('swcad-js-spec-profiles').init({ jscad, swcadJs })
+    swcadJsSpecAssembly.profiles = assemblyProfiles
 
-    const assemblyProfiles = require('swcad-js-profiles').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.profiles = assemblyProfiles
-
-    const assemblyProfileSpec = require('swcad-js-profile-spec').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.profileSpec = assemblyProfileSpec
-
-    const assemblyComponents = require('swcad-js-components').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.components = assemblyComponents
-
-    const assemblyComponentSpec = require('swcad-js-component-spec').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.componentSpec = assemblyComponentSpec
-
-    const assemblyUtils = require('swcad-js-utils').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.utils = assemblyUtils
-
-    const assemblyModels = require('swcad-js-models').init({ jscad, swcadJs: swcadJsAssembly })
-    swcadJsAssembly.models = assemblyModels
+    const assemblyComponents = require('swcad-js-spec-components').init({ jscad, swcadJs })
+    swcadJsSpecAssembly.components = assemblyComponents
 
 
     /**
      * User-facing library
      * */
-    const swcadJs = {
-        data: swcadJsAssembly.data,
-        calcs: swcadJsAssembly.calcs,
-        profiles: swcadJsAssembly.profiles,
-        profileSpec: swcadJsAssembly.profileSpec,
-        components: swcadJsAssembly.components,
-        componentSpec: swcadJsAssembly.componentSpec,
-        utils: swcadJsAssembly.utils,
-        models: swcadJsAssembly.models,
+    const swcadJsSpec = {
+        data: swcadJsSpecAssembly.data,
+        profiles: swcadJsSpecAssembly.profiles,
+        components: swcadJsSpecAssembly.components,
     }
 
-    return swcadJs
+    return swcadJsSpec
 }
 
 module.exports = {
